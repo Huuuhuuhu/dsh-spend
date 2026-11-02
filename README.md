@@ -25,7 +25,13 @@ GitHub: <https://github.com/Huuuhuuhu/dsh-spend>
 插件是完全独立的目录，不需要 `pnpm install`，不需要构建，也不依赖任何第三方包。
 
 1. 把整个 `dsh-spend` 目录复制到对方机器上的任意位置。
-2. 在 DSH 中安装这个本地 bundle 目录；或者使用 CLI：
+2. 在 DSH 中安装这个本地 bundle 目录；或者直接从 GitHub 安装：
+
+```sh
+dsh plugin --profile desktop add github:Huuuhuuhu/dsh-spend
+```
+
+本地目录方式：
 
 ```sh
 dsh plugin --profile desktop add "link:D:\path\to\dsh-spend"
