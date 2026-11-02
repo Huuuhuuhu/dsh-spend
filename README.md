@@ -2,8 +2,6 @@
 
 > Actual DeepSeek billing, inline in the DSH sidebar.
 
-GitHub: <https://github.com/Huuuhuuhu/dsh-spend>
-
 一个零依赖、无需构建的 DSH 插件：
 
 - 左下角账户行右侧显示真实账户余额
