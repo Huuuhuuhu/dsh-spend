@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Live balance and spend">
+  <rect x="4" y="12" width="56" height="40" rx="10" fill="#4d6bfe"/>
+  <path d="M38 20a12 12 0 0 0 0 24h18V20H38z" fill="#fff" opacity=".95"/>
+  <circle cx="42" cy="32" r="3" fill="#4d6bfe"/>
+  <path d="M16 26h10M16 32h10M16 38h10" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+</svg>

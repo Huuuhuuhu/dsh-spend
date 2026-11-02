@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "DSH Spend",
+    "description": "读取 DeepSeek Platform 实际扣款，按小时归属到 DSH 会话与工作区；同时显示账户余额。"
+  }
+}

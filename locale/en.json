@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "DSH Spend",
+    "description": "Reads actual Platform charges, attributes them by hour to DSH sessions and workspaces, and shows the account balance."
+  }
+}
