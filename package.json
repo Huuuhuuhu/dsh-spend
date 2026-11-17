@@ -1,6 +1,6 @@
 {
   "name": "dsh-spend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Actual DeepSeek billing, inline in the DSH sidebar.",
   "license": "MIT",

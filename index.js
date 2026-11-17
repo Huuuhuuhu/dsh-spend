@@ -100,6 +100,51 @@ function fold(events, inherited) {
   return entry
 }
 
+async function coldEvents(ctx, summary, signal) {
+  const controller = ctx.get('sessionController')
+  if (controller === undefined) throw new Error('sessionController unavailable')
+
+  if (typeof controller.events === 'function') {
+    const address =
+      summary.origin === 'subagent' && summary.parentSessionId
+        ? {
+            kind: 'subagent',
+            parentSessionId: summary.parentSessionId,
+            childSessionId: summary.sessionId,
+            mode: 'unknown',
+          }
+        : { kind: 'session', sessionId: summary.sessionId }
+    const records = []
+    let beforeSeq
+    let inherited = Number(summary.inheritedEventCount ?? 0)
+    for (let pageNo = 0; pageNo < 200; pageNo += 1) {
+      const page = await controller.events(
+        beforeSeq === undefined ? { address } : { address, beforeSeq },
+        signal,
+      )
+      if (page === null || page === undefined) break
+      if (page.inheritedEventCount !== undefined) inherited = Number(page.inheritedEventCount)
+      records.push(...(page.records ?? []))
+      if (!page.hasMore) break
+      const firstSeq = page.records?.[0]?.event?.seq
+      if (typeof firstSeq !== 'number' || firstSeq === beforeSeq) break
+      beforeSeq = firstSeq
+    }
+    records.sort((a, b) => a.event.seq - b.event.seq)
+    return { events: records.map((record) => record.event), inherited }
+  }
+
+  if (typeof controller.inspect === 'function') {
+    const inspection = await controller.inspect(summary.sessionId, signal)
+    return {
+      events: inspection?.events ?? [],
+      inherited: Number(inspection?.inheritedEventCount ?? 0),
+    }
+  }
+
+  throw new Error('no cold session reader')
+}
+
 async function scan(ctx, summary, signal) {
   const id = summary.sessionId
   const cached = sessions.get(id)
@@ -121,8 +166,8 @@ async function scan(ctx, summary, signal) {
 
   if (cached !== undefined && cached.updatedAt === summary.updatedAt) return cached
 
-  const inspected = await ctx.get('sessionController')?.inspect?.(id, signal)
-  const entry = fold(inspected?.events, Number(inspected?.inheritedEventCount ?? 0))
+  const inspected = await coldEvents(ctx, summary, signal)
+  const entry = fold(inspected.events, inspected.inherited)
   entry.updatedAt = summary.updatedAt ?? 0
   sessions.set(id, entry)
   return entry
